@@ -27,7 +27,7 @@ export type TransportType = 'car' | 'train' | 'flight' | 'walk' | 'bus';
 export interface ItineraryItem {
   id: string;
   dayIndex: number; // 0-based
-  time: string; // e.g. "09:30"
+  time?: string; // e.g. "09:30" (宿・ホテルなどは時間指定なし可能)
   title: string;
   location?: string;
   googleMapsUrl?: string;

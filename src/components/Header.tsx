@@ -48,8 +48,8 @@ export function Header({ showBack, title, onOpenMembers }: HeaderProps) {
               </Link>
             ) : null}
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl btn-theme-gradient flex items-center justify-center text-white shadow-md">
-                <Plane className="w-5 h-5 transform -rotate-12" />
+              <div className="w-9 h-9 rounded-xl overflow-hidden shadow-md flex items-center justify-center border border-white/20">
+                <img src="/icon.png" alt="TabiBookmark" className="w-full h-full object-cover" />
               </div>
               <div>
                 <span className="font-bold text-lg text-theme-primary">

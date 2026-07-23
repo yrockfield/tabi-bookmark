@@ -178,7 +178,7 @@ export function MemberManageModal({
         {isOwner ? (
           <form onSubmit={handleAddMember} className="space-y-3 pt-2 border-t border-white/10">
             <label className="text-xs font-bold text-theme-primary flex items-center gap-1">
-              <UserPlus className="w-4 h-4 text-theme-accent" /> 家族のGoogleアカウントを招待
+              <UserPlus className="w-4 h-4 text-theme-accent" /> メンバーのGoogleアカウントを招待
             </label>
 
             <div>

@@ -37,3 +37,4 @@ pnpm-debug.log*
 # local data storage fallback
 /data/
 
+HMAC.yml

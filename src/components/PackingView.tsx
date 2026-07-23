@@ -172,7 +172,7 @@ export function PackingView({ items, onSaveItems, isEditor }: PackingViewProps) 
                 <select
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value as PackingCategory)}
-                  className="w-full px-3 py-2 bg-slate-900 text-theme-primary border border-white/20 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full px-3 py-2 bg-white/10 text-theme-primary border border-white/20 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 >
                   <option value="shared">👨‍👩‍👧‍👦 家族共通</option>
                   <option value="clothes">👕 着替え</option>

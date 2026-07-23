@@ -3,8 +3,13 @@ import { Providers } from '@/components/Providers';
 import type { Metadata, Viewport } from 'next';
 
 export const metadata: Metadata = {
-  title: 'タビブ -TabiBookmark- | 家族のための旅のしおり',
-  description: 'スマホで手軽に共有できる家族旅行用「旅のしおり」アプリ。日程・持ち物・旅費精算・写真をS3クラウド連携。',
+  title: 'タビブ -TabiBookmark- | スマホでつくる、旅のしおり',
+  description: 'スマホで手軽に共有できる「旅のしおり」アプリ。日程・持ち物・旅費精算・写真をS3クラウド連携。',
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
 };
 
 export const viewport: Viewport = {

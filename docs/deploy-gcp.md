@@ -28,7 +28,7 @@
 
 ## 📋 前提条件
 
-- **Google Cloud アカウント** およびプロジェクト（例: `my-tabibookmark-proj`）
+- **Google Cloud アカウント** およびプロジェクト
 - ローカル環境にインストール済みのツール:
   - `gcloud` CLI (`gcloud components update`)
   - `docker`
@@ -37,26 +37,31 @@
 
 ## Step 1: Google Cloud Storage (GCS) の作成 & 認証キー発行
 
-1. **gcloud のプロジェクト設定とAPI有効化**
+1. **環境変数の設定**
+   ご自身の GCP プロジェクト ID やリージョン、バケット名を環境変数にセットします。
    ```bash
-   gcloud config set project MY_PROJECT_ID
+   export PROJECT_ID="your-gcp-project-id"  # 例: my-tabibookmark-12345
+   export BUCKET_NAME="tabibookmark-data-bucket"
+   export REGION="asia-northeast1"
+   ```
+
+2. **gcloud のプロジェクト設定とAPI有効化**
+   ```bash
+   gcloud config set project ${PROJECT_ID}
    gcloud services enable run.googleapis.com \
                           artifactregistry.googleapis.com \
                           storage.googleapis.com \
                           secretmanager.googleapis.com
    ```
 
-2. **GCS バケットの作成**
+3. **GCS バケットの作成**
    ```bash
-   export BUCKET_NAME="tabibookmark-data-bucket"
-   export REGION="asia-northeast1"
-
    gcloud storage buckets create gs://${BUCKET_NAME} \
      --location=${REGION} \
      --uniform-bucket-level-access
    ```
 
-3. **GCS S3互換 HMAC キー（Access Key / Secret Key）の発行**
+4. **GCS S3互換 HMAC キー（Access Key / Secret Key）の発行**
    Cloud Run から GCS を S3 互換 API 経由で操作するための HMAC キーを発行します。
    ```bash
    # サービスアカウントの作成
@@ -65,11 +70,11 @@
 
    # バケットのストレージ管理者権限を付与
    gcloud storage buckets add-iam-policy-binding gs://${BUCKET_NAME} \
-     --member="serviceAccount:tabibookmark-sa@MY_PROJECT_ID.iam.gserviceaccount.com" \
+     --member="serviceAccount:tabibookmark-sa@${PROJECT_ID}.iam.gserviceaccount.com" \
      --role="roles/storage.objectAdmin"
 
    # HMACアクセスキー・シークレットの発行
-   gcloud storage hmac create tabibookmark-sa@MY_PROJECT_ID.iam.gserviceaccount.com
+   gcloud storage hmac create tabibookmark-sa@${PROJECT_ID}.iam.gserviceaccount.com
    ```
    *出力結果の `accessId` (S3_ACCESS_KEY_ID) と `secret` (S3_SECRET_ACCESS_KEY) をメモしてください。*
 
@@ -94,18 +99,18 @@
    ```bash
    gcloud artifacts repositories create tabibookmark-repo \
      --repository-format=docker \
-     --location=asia-northeast1 \
+     --location=${REGION} \
      --description="Docker repository for Tabibookmark"
    ```
 
 2. **Docker 認証の設定**
    ```bash
-   gcloud auth configure-docker asia-northeast1-docker.pkg.dev
+   gcloud auth configure-docker ${REGION}-docker.pkg.dev
    ```
 
 3. **ローカルで Docker イメージをビルド＆プッシュ**
    ```bash
-   export IMAGE_URI="asia-northeast1-docker.pkg.dev/MY_PROJECT_ID/tabibookmark-repo/tabibookmark:latest"
+   export IMAGE_URI="${REGION}-docker.pkg.dev/${PROJECT_ID}/tabibookmark-repo/tabibookmark:latest"
 
    # ビルド
    docker build -t ${IMAGE_URI} .
@@ -124,13 +129,13 @@ Cloud Run へコンテナを単一インスタンス/オートスケール対応
 gcloud run deploy tabibookmark \
   --image=${IMAGE_URI} \
   --platform=managed \
-  --region=asia-northeast1 \
+  --region=${REGION} \
   --allow-unauthenticated \
   --port=3000 \
   --set-env-vars="NEXTAUTH_SECRET=a-very-secure-random-string-for-nextauth" \
   --set-env-vars="GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com" \
   --set-env-vars="GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET" \
-  --set-env-vars="S3_BUCKET_NAME=tabibookmark-data-bucket" \
+  --set-env-vars="S3_BUCKET_NAME=${BUCKET_NAME}" \
   --set-env-vars="S3_REGION=auto" \
   --set-env-vars="S3_ENDPOINT=https://storage.googleapis.com" \
   --set-env-vars="S3_ACCESS_KEY_ID=YOUR_HMAC_ACCESS_ID" \
@@ -154,7 +159,7 @@ gcloud run deploy tabibookmark \
 2. **Cloud Run の NEXTAUTH_URL 環境変数をアップデート**
    ```bash
    gcloud run services update tabibookmark \
-     --region=asia-northeast1 \
+     --region=${REGION} \
      --update-env-vars="NEXTAUTH_URL=https://tabibookmark-xyz123-an.a.run.app"
    ```
 

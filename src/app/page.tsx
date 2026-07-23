@@ -123,7 +123,7 @@ export default function HomePage() {
               <div>
                 <h3 className="font-bold text-sm text-theme-primary">Googleアカウントでログイン</h3>
                 <p className="text-xs text-theme-secondary mt-1 max-w-xs mx-auto">
-                  ログインすると、あなたやご家族の「旅のしおり」を表示・作成できます。
+                  ログインすると、みんなの「旅のしおり」を表示・作成できます。
                 </p>
               </div>
             </div>

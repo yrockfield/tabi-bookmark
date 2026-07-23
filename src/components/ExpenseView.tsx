@@ -244,7 +244,7 @@ export function ExpenseView({ items, members, onSaveItems, canExpense, onOpenMem
                 <select
                   value={formPaidBy}
                   onChange={(e) => setFormPaidBy(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-900 text-theme-primary border border-white/20 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full px-3 py-2 bg-white/10 text-theme-primary border border-white/20 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 >
                   {members.map((m) => {
                     const name = m.name || m.email;
